@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements OnRecyclerLongCli
         final EditText editTextNote = (EditText) v.findViewById(R.id.edit_text_note_dialog);
         if (needUpdate)
             editTextNote.setText(text);
+        editTextNote.setSelection(editTextNote.getText().length()); //set cursor to end
         TextView textViewTitleDialog = (TextView) v.findViewById(R.id.text_view_title_dialog);
         textViewTitleDialog.setText(needUpdate ? R.string.update_note : R.string.new_note);
 
@@ -105,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements OnRecyclerLongCli
                     public void onClick(DialogInterface dialog, int which) {
                         if (TextUtils.isEmpty(editTextNote.getText().toString())) {
                             Toast.makeText(MainActivity.this, R.string.enter_note, Toast.LENGTH_SHORT).show();
-                            return;
                         } else {
                             if (!needUpdate) {
                                 String text = editTextNote.getText().toString();
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements OnRecyclerLongCli
                     }
                 });
         final AlertDialog alertDialog = builderDialog.create();
-        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE); //open keyboard when dialog created
         alertDialog.show();
     }
 
