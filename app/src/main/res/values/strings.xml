@@ -2,7 +2,12 @@
     <string name="app_name">Notes</string>
     <string name="notes_not_found">Notes not found</string>
     <string name="new_note">New Note</string>
-    <string name="hint_enter_note">Enter your text!</string>
-    <string name="ok">OK</string>
+    <string name="enter_note">Enter your text!</string>
     <string name="cancel">Cancel</string>
+    <string name="update">Update</string>
+    <string name="save">Save</string>
+    <string name="update_note">Update Note</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="choose_option">Choose option</string>
 </resources>

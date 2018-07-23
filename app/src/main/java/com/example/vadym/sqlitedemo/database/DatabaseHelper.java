@@ -83,6 +83,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return note;
     }
 
+    public int updateNote(Note note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Note.COLUMN_NOTE, note.getText());
+
+        return db.update(Note.TABLE_NAME, values, Note.COLUMN_ID + " = ?", new String[]{String.valueOf(note.getId())});
+    }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
