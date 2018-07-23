@@ -2,5 +2,7 @@
     <string name="app_name">Notes</string>
     <string name="notes_not_found">Notes not found</string>
     <string name="new_note">New Note</string>
-    <string name="hint_enter_note">Enter your note!</string>
+    <string name="hint_enter_note">Enter your text!</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
 </resources>

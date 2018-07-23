@@ -9,16 +9,16 @@ public class Note {
     public static final String COLUMN_TIMESTAMP = "Timestamp";
 
     private int id;
-    private String note;
+    private String text;
     private String timestamp;
 
     public Note() {
 
     }
 
-    public Note(int id, String note, String timestamp) {
+    public Note(int id, String text, String timestamp) {
         this.id = id;
-        this.note = note;
+        this.text = text;
         this.timestamp = timestamp;
     }
 
@@ -30,12 +30,12 @@ public class Note {
         this.id = id;
     }
 
-    public String getNote() {
-        return note;
+    public String getText() {
+        return text;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public String getTimestamp() {

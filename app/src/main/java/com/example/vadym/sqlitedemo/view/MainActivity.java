@@ -39,11 +39,15 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        rv = (RecyclerView) findViewById(R.id.recycler_view);
-
         db = new DatabaseHelper(this);
-
         notes.addAll(db.getAllNotes());
+
+        adapter = new AdapterRecycler(notes);
+        rv = (RecyclerView) findViewById(R.id.recycler_view);
+        rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        rv.setItemAnimator(new DefaultItemAnimator());
+        rv.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
+        rv.setAdapter(adapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -52,34 +56,27 @@ public class MainActivity extends AppCompatActivity {
                 showAlertDialog();
             }
         });
-
-        adapter = new AdapterRecycler(notes);
-        rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        rv.setItemAnimator(new DefaultItemAnimator());
-        rv.addItemDecoration(new MyDividerItemDecoration(this, LinearLayoutManager.VERTICAL, 16));
-        rv.setAdapter(adapter);
     }
 
     private void showAlertDialog() {
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
         View v = inflater.inflate(R.layout.dialog, null);
-
         final EditText editTextNote = (EditText) v.findViewById(R.id.edit_text_note);
-
         AlertDialog.Builder builderDialog = new AlertDialog.Builder(MainActivity.this);
         builderDialog.setView(v)
-                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (TextUtils.isEmpty(editTextNote.getText().toString())) {
-                            Toast.makeText(MainActivity.this, "Enter note!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, R.string.hint_enter_note, Toast.LENGTH_SHORT).show();
                             return;
+                        } else {
+                            String text = editTextNote.getText().toString();
+                            addNote(text);
                         }
-                        String note = editTextNote.getText().toString();
-                        addNote(note);
                     }
                 })
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
@@ -91,8 +88,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addNote(String note) {
+        //CREATE
         long id = db.insertNote(note);
-
+        //READ
         Note n = db.getNote(id);
         notes.add(0, n);
 

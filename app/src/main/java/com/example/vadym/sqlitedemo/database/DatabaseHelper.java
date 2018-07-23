@@ -29,8 +29,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public Note getNote(long id) {
+    public List<Note> getAllNotes() {
+        List<Note> notes = new ArrayList<>();
 
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + Note.TABLE_NAME + " ORDER BY " + Note.COLUMN_ID + " DESC",
+                null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Note n = new Note();
+                n.setId(cursor.getInt(cursor.getColumnIndex(Note.COLUMN_ID)));
+                n.setText(cursor.getString(cursor.getColumnIndex(Note.COLUMN_NOTE)));
+                n.setTimestamp(cursor.getString(cursor.getColumnIndex(Note.COLUMN_TIMESTAMP)));
+
+                notes.add(n);
+            } while (cursor.moveToNext());
+        }
+
+        db.close();
+
+        return notes;
+    }
+
+    public long insertNote(String note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(Note.COLUMN_NOTE, note);
+
+        long id = db.insert(Note.TABLE_NAME, null, values);
+
+        db.close();
+        return id;
+    }
+
+    public Note getNote(long id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(Note.TABLE_NAME, new String[]{Note.COLUMN_ID, Note.COLUMN_NOTE, Note.COLUMN_TIMESTAMP}, Note.COLUMN_ID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
@@ -46,42 +81,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return note;
-    }
-
-    public long insertNote(String note) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(Note.COLUMN_NOTE, note);
-
-        long id = db.insert(Note.TABLE_NAME, null, values);
-
-        db.close();
-        return id;
-    }
-
-    public List<Note> getAllNotes() {
-        List<Note> notes = new ArrayList<>();
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(
-                "SELECT * FROM " + Note.TABLE_NAME + " ORDER BY " + Note.COLUMN_ID + " DESC",
-                null);
-
-        if (cursor.moveToFirst()) {
-            do {
-                Note n = new Note();
-                n.setId(cursor.getInt(cursor.getColumnIndex(Note.COLUMN_ID)));
-                n.setNote(cursor.getString(cursor.getColumnIndex(Note.COLUMN_NOTE)));
-                n.setTimestamp(cursor.getString(cursor.getColumnIndex(Note.COLUMN_TIMESTAMP)));
-
-                notes.add(n);
-            } while (cursor.moveToNext());
-        }
-
-        db.close();
-
-        return notes;
     }
 
     @Override

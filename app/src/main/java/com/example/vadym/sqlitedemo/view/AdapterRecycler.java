@@ -34,7 +34,7 @@ public class AdapterRecycler extends RecyclerView.Adapter<AdapterRecycler.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.textViewNote.setText(notes.get(position).getNote());
+        holder.textViewNote.setText(notes.get(position).getText());
         holder.textViewDot.setText(Html.fromHtml("&#8226;"));
         holder.textViewTimestamp.setText(formatDate(notes.get(position).getTimestamp()));
     }
