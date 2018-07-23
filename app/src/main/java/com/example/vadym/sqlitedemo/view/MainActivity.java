@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
@@ -20,13 +21,14 @@ import com.example.vadym.sqlitedemo.R;
 import com.example.vadym.sqlitedemo.database.DatabaseHelper;
 import com.example.vadym.sqlitedemo.database.model.Note;
 import com.example.vadym.sqlitedemo.utils.MyDividerItemDecoration;
+import com.example.vadym.sqlitedemo.utils.OnRecyclerLongClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-
+public class MainActivity extends AppCompatActivity implements OnRecyclerLongClickListener {
     private List<Note> notes = new ArrayList<>();
+
     private RecyclerView rv;
     private AdapterRecycler adapter;
 
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         db = new DatabaseHelper(this);
         notes.addAll(db.getAllNotes());
 
-        adapter = new AdapterRecycler(notes);
+        adapter = new AdapterRecycler(notes, this);
         rv = (RecyclerView) findViewById(R.id.recycler_view);
         rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         rv.setItemAnimator(new DefaultItemAnimator());
@@ -58,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onLongClick(int position) {
+
+    }
+
     private void showAlertDialog() {
         LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
         View v = inflater.inflate(R.layout.dialog, null);
@@ -67,10 +74,12 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
                         if (TextUtils.isEmpty(editTextNote.getText().toString())) {
                             Toast.makeText(MainActivity.this, R.string.hint_enter_note, Toast.LENGTH_SHORT).show();
                             return;
                         } else {
+
                             String text = editTextNote.getText().toString();
                             addNote(text);
                         }
