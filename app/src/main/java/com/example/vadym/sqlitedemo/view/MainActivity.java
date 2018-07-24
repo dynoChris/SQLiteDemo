@@ -80,12 +80,19 @@ public class MainActivity extends AppCompatActivity implements OnRecyclerLongCli
                         showNoteDialog(true, text, position);
                         break;
                     case 1: //delete note
-                        //deleteNote(position);
+                        deleteNote(position);
                         break;
                 }
             }
         });
         builder.show();
+    }
+
+    private void deleteNote(int position) {
+        db.deleteNote(notes.get(position));
+
+        notes.remove(position);
+        adapter.notifyItemRemoved(position);
     }
 
     private void showNoteDialog(final boolean needUpdate, String text, final int position) {
@@ -104,17 +111,7 @@ public class MainActivity extends AppCompatActivity implements OnRecyclerLongCli
                 .setPositiveButton(needUpdate ? R.string.update : R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (TextUtils.isEmpty(editTextNote.getText().toString())) {
-                            Toast.makeText(MainActivity.this, R.string.enter_note, Toast.LENGTH_SHORT).show();
-                        } else {
-                            if (!needUpdate) {
-                                String text = editTextNote.getText().toString();
-                                addNote(text);
-                            } else {
-                                String text = editTextNote.getText().toString();
-                                updateNote(text, position);
-                            }
-                        }
+
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -126,6 +123,24 @@ public class MainActivity extends AppCompatActivity implements OnRecyclerLongCli
         final AlertDialog alertDialog = builderDialog.create();
         alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE); //open keyboard when dialog created
         alertDialog.show();
+
+        alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (TextUtils.isEmpty(editTextNote.getText().toString())) {
+                    Toast.makeText(MainActivity.this, R.string.enter_note, Toast.LENGTH_SHORT).show();
+                } else {
+                    if (!needUpdate) {
+                        String text = editTextNote.getText().toString();
+                        addNote(text);
+                    } else {
+                        String text = editTextNote.getText().toString();
+                        updateNote(text, position);
+                    }
+                    alertDialog.dismiss();
+                }
+            }
+        });
     }
 
     private void updateNote(String text, int position) {

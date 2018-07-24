@@ -96,4 +96,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
     }
+
+    public void deleteNote(Note note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(Note.TABLE_NAME, Note.COLUMN_ID + " = ?", new String[]{String.valueOf(note.getId())});
+        db.close();
+    }
 }
